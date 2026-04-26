@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semi-Senior Backend Engineer — Issuing & Cards | Pomelo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #08080a;
+  --surface: #101014;
+  --surface2: #16161c;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.13);
+  --text: #f4f4f0;
+  --muted: #7a7a80;
+  --muted2: #a0a0a8;
+  --green: #c6f135;
+  --green-dim: rgba(198,241,53,0.12);
+  --green-border: rgba(198,241,53,0.25);
+  --font: 'Plus Jakarta Sans', sans-serif;
+  --radius: 12px;
+  --radius-lg: 18px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ─── NAV ─── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(8,8,10,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-logo-mark {
+  width: 32px;
+  height: 32px;
+  background: var(--green);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-logo-mark svg { width: 18px; height: 18px; }
+.nav-logo-text {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.nav-link {
+  font-size: 14px;
+  color: var(--muted2);
+  transition: color 0.15s;
+}
+.nav-link:hover { color: var(--text); }
+.nav-btn {
+  background: var(--green);
+  color: #08080a;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 18px;
+  border-radius: 999px;
+  transition: opacity 0.15s;
+}
+.nav-btn:hover { opacity: 0.85; }
+
+/* ─── HERO ─── */
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: 6rem 2rem 5rem;
+  text-align: center;
+}
+/* Glow top */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -180px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 400px;
+  background: radial-gradient(ellipse at center, rgba(198,241,53,0.13) 0%, transparent 70%);
+  pointer-events: none;
+}
+/* Grid pattern */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 30%, transparent 100%);
+  pointer-events: none;
+  opacity: 0.5;
+}
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--green-dim);
+  border: 1px solid var(--green-border);
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 2rem;
+}
+.hero-eyebrow-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+.hero-title {
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 800;
+  line-height: 1.07;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 1.25rem;
+}
+.hero-title em {
+  font-style: normal;
+  color: var(--green);
+}
+.hero-sub {
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--muted2);
+  line-height: 1.7;
+  max-width: 540px;
+  margin: 0 auto 2.5rem;
+}
+.hero-meta {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 2.5rem;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border2);
+  background: var(--surface);
+  color: var(--muted2);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+.chip-dot { width: 7px; height: 7px; border-radius: 50%; }
+.chip-green .chip-dot { background: #4ade80; }
+.chip-blue .chip-dot { background: #60a5fa; }
+.chip-yellow .chip-dot { background: var(--green); }
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--green);
+  color: #08080a;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 13px 28px;
+  border-radius: 999px;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.hero-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+.hero-cta svg { width: 16px; height: 16px; }
+
+/* ─── STACK STRIP ─── */
+.stack-strip {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 1.25rem 2rem;
+  overflow: hidden;
+  position: relative;
+}
+.stack-strip-inner {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+.stack-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.stack-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.stag {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--green);
+  background: var(--green-dim);
+  border: 1px solid var(--green-border);
+  padding: 3px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+  font-family: 'Courier New', monospace;
+}
+
+/* ─── SECTIONS ─── */
+.section {
+  padding: 5rem 2rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-inner { max-width: 1100px; margin: 0 auto; }
+
+.section-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+}
+.section-pill::before {
+  content: '';
+  width: 16px; height: 1px;
+  background: var(--muted);
+}
+
+.section-heading {
+  font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+.section-heading em { font-style: normal; color: var(--green); }
+
+.section-lead {
+  font-size: 16px;
+  color: var(--muted2);
+  line-height: 1.7;
+  max-width: 560px;
+  font-weight: 300;
+  margin-bottom: 3rem;
+}
+
+/* ─── STAT ROW ─── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-top: 3rem;
+}
+.stat-cell {
+  background: var(--surface);
+  padding: 2rem 1.75rem;
+}
+.stat-num {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--green);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+.stat-desc {
+  font-size: 13px;
+  color: var(--muted2);
+  line-height: 1.4;
+}
+
+/* ─── TWO-COL CARDS ─── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+@media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: var(--border2); }
+
+.card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.25rem;
+}
+
+.item-list { list-style: none; }
+.item-list li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+  color: var(--muted2);
+  line-height: 1.55;
+}
+.item-list li:last-child { border-bottom: none; }
+.item-list li::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
+
+/* ─── PRINCIPLES ─── */
+.principles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+.principle-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.principle-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-2px);
+}
+.principle-num {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--green);
+  margin-bottom: 1rem;
+  font-family: 'Courier New', monospace;
+}
+.principle-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.6rem;
+  line-height: 1.3;
+}
+.principle-text {
+  font-size: 13px;
+  color: var(--muted2);
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+/* ─── EVP ─── */
+.evp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.evp-cell {
+  background: var(--surface);
+  padding: 2rem 1.75rem;
+  transition: background 0.2s;
+}
+.evp-cell:hover { background: var(--surface2); }
+.evp-icon {
+  width: 40px; height: 40px;
+  background: var(--green-dim);
+  border: 1px solid var(--green-border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.evp-icon svg { width: 20px; height: 20px; stroke: var(--green); }
+.evp-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+.evp-desc {
+  font-size: 13px;
+  color: var(--muted2);
+  line-height: 1.55;
+  font-weight: 300;
+}
+
+/* ─── PROCESS ─── */
+.process-track {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+.process-track::before {
+  content: '';
+  position: absolute;
+  top: 19px;
+  left: calc(12.5% + 4px);
+  right: calc(12.5% + 4px);
+  height: 1px;
+  background: linear-gradient(90deg, var(--green) 0%, rgba(198,241,53,0.2) 100%);
+}
+.process-step { text-align: center; }
+.step-ball {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 1.5px solid var(--green);
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  font-family: 'Courier New', monospace;
+  position: relative;
+  z-index: 1;
+}
+.step-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+.step-detail {
+  font-size: 12px;
+  color: var(--muted);
+}
+@media (max-width: 520px) {
+  .process-track { grid-template-columns: repeat(2, 1fr); }
+  .process-track::before { display: none; }
+}
+
+/* ─── CTA SECTION ─── */
+.cta-section {
+  padding: 6rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  bottom: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 400px;
+  background: radial-gradient(ellipse, rgba(198,241,53,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-inner { position: relative; z-index: 1; max-width: 560px; margin: 0 auto; }
+.cta-title {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+.cta-title em { font-style: normal; color: var(--green); }
+.cta-sub {
+  font-size: 15px;
+  color: var(--muted2);
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 2.5rem;
+}
+.cta-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--green);
+  color: #08080a;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 13px 26px;
+  border-radius: 999px;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--muted2);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 22px;
+  border-radius: 999px;
+  border: 1px solid var(--border2);
+  transition: color 0.15s, border-color 0.15s;
+}
+.btn-secondary:hover { color: var(--text); border-color: rgba(255,255,255,0.25); }
+.cta-note {
+  margin-top: 1.5rem;
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'Courier New', monospace;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem;
+}
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.footer-text { font-size: 13px; color: var(--muted); }
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.footer-logo-mark {
+  width: 24px; height: 24px;
+  background: var(--green);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+}
+.footer-logo-mark svg { width: 13px; height: 13px; }
+
+/* ─── DIVIDER ─── */
+.divider { height: 1px; background: var(--border); max-width: 1100px; margin: 0 auto; }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <div class="nav-logo-mark">
+        <svg viewBox="0 0 18 18" fill="none">
+          <rect x="2" y="2" width="5.5" height="5.5" rx="1.5" fill="#08080a"/>
+          <rect x="10.5" y="2" width="5.5" height="5.5" rx="1.5" fill="#08080a"/>
+          <rect x="2" y="10.5" width="5.5" height="5.5" rx="1.5" fill="#08080a"/>
+          <rect x="10.5" y="10.5" width="5.5" height="5.5" rx="1.5" fill="#08080a" opacity="0.35"/>
+        </svg>
+      </div>
+      <span class="nav-logo-text">Pomelo</span>
+    </div>
+    <div class="nav-right">
+      <a class="nav-link" href="#rol">El rol</a>
+      <a class="nav-link" href="#beneficios">Beneficios</a>
+      <a class="nav-link" href="#postulate">Postulate</a>
+      <a class="nav-btn" href="#postulate">Postulate →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-dot"></span>
+      Issuing &amp; Cards · Buenos Aires
+    </div>
+    <h1 class="hero-title">
+      Semi-Senior<br><em>Backend Engineer</em>
+    </h1>
+    <p class="hero-sub">
+      Buscamos a alguien con 2–4 años de experiencia que quiera escalar a senior trabajando con problemas reales en infraestructura financiera que corre en 6 países.
+    </p>
+    <div class="hero-meta">
+      <span class="chip chip-green"><span class="chip-dot"></span>Full-time</span>
+      <span class="chip chip-blue"><span class="chip-dot"></span>Híbrido — Buenos Aires</span>
+      <span class="chip chip-yellow"><span class="chip-dot"></span>Sueldo en USD + bonus anual</span>
+    </div>
+    <a class="hero-cta" href="#postulate">
+      Ver cómo aplicar
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+    </a>
+  </div>
+</section>
+
+<!-- STACK STRIP -->
+<div class="stack-strip">
+  <div class="stack-strip-inner">
+    <span class="stack-label">Stack</span>
+    <div class="stack-tags">
+      <span class="stag">Node.js</span>
+      <span class="stag">TypeScript</span>
+      <span class="stag">PostgreSQL</span>
+      <span class="stag">Kafka</span>
+      <span class="stag">AWS</span>
+      <span class="stag">Kubernetes</span>
+      <span class="stag">REST APIs</span>
+      <span class="stag">Visa / MC</span>
+      <span class="stag">Apple Pay</span>
+      <span class="stag">Google Pay</span>
+    </div>
+  </div>
+</div>
+
+<!-- IMPACTO -->
+<section class="section">
+  <div class="section-inner">
+    <p class="section-pill">Contexto</p>
+    <h2 class="section-heading">Tu código corre en<br><em>infraestructura real</em></h2>
+    <p class="section-lead">
+      Cuando alguien paga con tarjeta usando productos de Santander, BBVA, Rappi o Cocos Capital en Argentina, Brasil, México, Colombia, Chile o Perú, la transacción puede haber pasado por nuestra infraestructura.
+    </p>
+    <div class="stats-row">
+      <div class="stat-cell">
+        <div class="stat-num">6</div>
+        <div class="stat-desc">países donde opera la plataforma</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">150+</div>
+        <div class="stat-desc">empresas clientes en producción</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">4 clics</div>
+        <div class="stat-desc">instancias de proceso en solo 2 semanas</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROL -->
+<section class="section" id="rol">
+  <div class="section-inner">
+    <p class="section-pill">El rol</p>
+    <h2 class="section-heading">Lo que vas a hacer<br>y lo que buscamos</h2>
+    <p class="section-lead">Trabajás codo a codo con seniors y tech leads desde el día uno, con impacto directo en producción.</p>
+    <div class="two-col">
+      <div class="card">
+        <p class="card-label">Responsabilidades</p>
+        <ul class="item-list">
+          <li>Desarrollar features sobre las APIs del producto de Issuing &amp; Cards.</li>
+          <li>Trabajar con stack moderno: Node.js + TypeScript, PostgreSQL, Kafka, AWS y Kubernetes.</li>
+          <li>Integrar con redes de pago globales: Visa, Mastercard, Apple Pay y Google Pay.</li>
+          <li>Participar activamente en decisiones técnicas del equipo.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="card-label">Requisitos</p>
+        <ul class="item-list">
+          <li>2–4 años de experiencia en desarrollo backend en entornos productivos.</li>
+          <li>Node.js y TypeScript sólido — o Java, Go, Python con apertura a adaptarse.</li>
+          <li>APIs REST, PostgreSQL y al menos un broker de mensajería (Kafka, RabbitMQ, etc.).</li>
+          <li>Git, CI/CD y testing automatizado: unitario e integración.</li>
+          <li>Inglés intermedio para comunicación con equipos.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="card-label">Competencias</p>
+        <ul class="item-list">
+          <li>Capacidad de trabajo en equipo en entornos ágiles.</li>
+          <li>Pensamiento analítico y resolución de problemas complejos.</li>
+          <li>Proactividad y autonomía en la ejecución de tareas.</li>
+          <li>Comunicación fluida con equipos técnicos y de negocio.</li>
+          <li>Adaptabilidad a entornos dinámicos y en crecimiento constante.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="card-label">Deseables (no excluyentes)</p>
+        <ul class="item-list">
+          <li>Experiencia en fintech, banca digital, e-commerce o medios de pago.</li>
+          <li>Conocimiento de infraestructura cloud: AWS, GCP o Azure.</li>
+          <li>Experiencia con arquitecturas distribuidas y microservicios.</li>
+          <li>Sistemas de alta escala (+1M requests/día).</li>
+          <li>Seguridad en aplicaciones: OWASP, autenticación y autorización.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRINCIPIOS CULTURALES -->
+<section class="section">
+  <div class="section-inner">
+    <p class="section-pill">Cultura</p>
+    <h2 class="section-heading">Nuestros principios<br><em>culturales</em></h2>
+    <p class="section-lead">Así es como trabajamos en Pomelo, y lo que vas a encontrar cuando te sumes al equipo.</p>
+    <div class="principles-grid">
+      <div class="principle-card">
+        <p class="principle-num">01</p>
+        <h3 class="principle-title">Somos aprendices seriales</h3>
+        <p class="principle-text">No nos conformamos con lo que sabemos. Desafiamos lo que conocemos y buscamos nuevas formas. Aprendemos de nuestros errores y avanzamos con humildad.</p>
+      </div>
+      <div class="principle-card">
+        <p class="principle-num">02</p>
+        <h3 class="principle-title">One Pomelo Team</h3>
+        <p class="principle-text">Trabajamos como un único equipo. Miramos siempre a los mismos objetivos del negocio por sobre los individuales. Damos y recibimos feedback genuino y constructivo.</p>
+      </div>
+      <div class="principle-card">
+        <p class="principle-num">03</p>
+        <h3 class="principle-title">Velocidad y calidad</h3>
+        <p class="principle-text">Entregamos con excelencia en tiempos desafiantes. Somos perseverantes y nos adaptamos a objetivos en constante evolución — es nuestra ventaja competitiva.</p>
+      </div>
+      <div class="principle-card">
+        <p class="principle-num">04</p>
+        <h3 class="principle-title">Foco siempre en el cliente</h3>
+        <p class="principle-text">Creamos valor real para nuestros clientes. Escuchamos, priorizamos, encontramos oportunidades y traemos soluciones que generan impacto y hacen simple lo complejo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFICIOS / EVP -->
+<section class="section" id="beneficios">
+  <div class="section-inner">
+    <p class="section-pill">Propuesta de valor</p>
+    <h2 class="section-heading">Anímate a ser parte de<br>una <em>experiencia única</em></h2>
+    <p class="section-lead">Más que un trabajo — una plataforma para crecer rápido con impacto real.</p>
+    <div class="evp-grid">
+      <div class="evp-cell">
+        <div class="evp-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 17l4-8 4 4 4-6 4 10"/>
+          </svg>
+        </div>
+        <div class="evp-title">Crecimiento real</div>
+        <div class="evp-desc">Plan de carrera semi-senior → senior con mentor asignado y review cada 4 meses.</div>
+      </div>
+      <div class="evp-cell">
+        <div class="evp-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
+          </svg>
+        </div>
+        <div class="evp-title">Vacaciones adicionales</div>
+        <div class="evp-desc">Una semana extra de desconexión y recarga durante la última semana del año.</div>
+      </div>
+      <div class="evp-cell">
+        <div class="evp-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12h8M12 8v8"/>
+          </svg>
+        </div>
+        <div class="evp-title">Aprendizaje continuo</div>
+        <div class="evp-desc">Budget de capacitación, tiempo pago para conferencias y clases de inglés incluidas.</div>
+      </div>
+      <div class="evp-cell">
+        <div class="evp-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="evp-title">Mentoría real</div>
+        <div class="evp-desc">Trabajás codo a codo con seniors y tech leads. No hay seniority de papel.</div>
+      </div>
+      <div class="evp-cell">
+        <div class="evp-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2M12 12v4M10 14h4"/>
+          </svg>
+        </div>
+        <div class="evp-title">Compensación en USD</div>
+        <div class="evp-desc">Salario competitivo en dólares más bono anual según desempeño.</div>
+      </div>
+      <div class="evp-cell">
+        <div class="evp-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>
+          </svg>
+        </div>
+        <div class="evp-title">Flexibilidad</div>
+        <div class="evp-desc">Modalidad híbrida, prepaga corporativa, día libre de cumpleaños y descuentos en gimnasios.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESO -->
+<section class="section">
+  <div class="section-inner">
+    <p class="section-pill">Proceso</p>
+    <h2 class="section-heading"><em>4 instancias</em> en 2 semanas</h2>
+    <p class="section-lead">Un proceso ágil, sin vueltas. Respondemos en 48 horas hábiles, tengas o no avance.</p>
+    <div class="process-track">
+      <div class="process-step">
+        <div class="step-ball">01</div>
+        <div class="step-name">Aplicación</div>
+        <div class="step-detail">CV + GitHub o projects</div>
+      </div>
+      <div class="process-step">
+        <div class="step-ball">02</div>
+        <div class="step-name">Screening</div>
+        <div class="step-detail">Llamada inicial 30 min</div>
+      </div>
+      <div class="process-step">
+        <div class="step-ball">03</div>
+        <div class="step-name">Técnica</div>
+        <div class="step-detail">Ejercicio + live coding</div>
+      </div>
+      <div class="process-step">
+        <div class="step-ball">04</div>
+        <div class="step-name">Final</div>
+        <div class="step-detail">Cultura y fit de equipo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="postulate">
+  <div class="cta-inner">
+    <p class="section-pill" style="justify-content:center;">Postulate</p>
+    <h2 class="cta-title">¿Te suma?<br><em>Escribinos.</em></h2>
+    <p class="cta-sub">
+      Mandanos tu GitHub, side projects o lo que muestre cómo pensás. No hace falta que sea perfecto — queremos ver cómo razonás.
+    </p>
+    <div class="cta-actions">
+      <a class="btn-primary" href="mailto:recruiting@pomelo.la">
+        Postularme ahora
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+      </a>
+      <a class="btn-secondary" href="https://pomelo.la/empresa/trabaja-con-nosotros">
+        Ver todas las búsquedas
+      </a>
+    </div>
+    <p class="cta-note">Respondemos en 48 horas hábiles — tengas o no avance en el proceso.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div class="footer-logo-mark">
+        <svg viewBox="0 0 14 14" fill="none">
+          <rect x="1" y="1" width="4.5" height="4.5" rx="1.2" fill="#08080a"/>
+          <rect x="8.5" y="1" width="4.5" height="4.5" rx="1.2" fill="#08080a"/>
+          <rect x="1" y="8.5" width="4.5" height="4.5" rx="1.2" fill="#08080a"/>
+          <rect x="8.5" y="8.5" width="4.5" height="4.5" rx="1.2" fill="#08080a" opacity="0.3"/>
+        </svg>
+      </div>
+      Pomelo
+    </div>
+    <span class="footer-text">Semi-Senior Backend Engineer · Issuing &amp; Cards · Buenos Aires</span>
+    <span class="footer-text">© 2025 Pomelo. Todos los derechos reservados.</span>
+  </div>
+</footer>
+
+</body>
+</html>
